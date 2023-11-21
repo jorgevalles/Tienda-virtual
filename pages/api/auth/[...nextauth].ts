@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-// import GithubProvider from 'next-auth/providers/github';
+import GithubProvider from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 
 import { dbUsers } from '../../../database';
@@ -43,50 +43,50 @@ export default NextAuth({
       },
     }),
 
-    // GithubProvider({
-    //   clientId: process.env.GITHUB_ID!,
-    //   clientSecret: process.env.GITHUB_SECRET!,
-    // }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
   ],
 
-  // Custom Pages
-  pages: {
-    signIn: '/auth/login',
-    newUser: '/auth/register'
-  },
+  // // Custom Pages
+  // pages: {
+  //   signIn: '/auth/login',
+  //   newUser: '/auth/register'
+  // },
 
-  // Callbacks
-  jwt: {
-    // secret: process.env.JWT_SECRET_SEED, // deprecated
-  },
+  // // Callbacks
+  // jwt: {
+  //   // secret: process.env.JWT_SECRET_SEED, // deprecated
+  // },
   
-  session: {
-    maxAge: 2592000, /// 30d
-    strategy: 'jwt',
-    updateAge: 86400, // cada día
-  },
+  // session: {
+  //   maxAge: 2592000, /// 30d
+  //   strategy: 'jwt',
+  //   updateAge: 86400, // cada día
+  // },
 
 
-  callbacks: {
+  // callbacks: {
 
-    async jwt({ token, account, user }) {
-      //  console.log({ token, account, user });
+  //   async jwt({ token, account, user }) {
+  //     //  console.log({ token, account, user });
 
-      if ( account ) {
-        token.accessToken = account.access_token;
+  //     if ( account ) {
+  //       token.accessToken = account.access_token;
 
-        switch( account.type ) {
+  //       switch( account.type ) {
 
-          case 'oauth': 
-            token.user = await dbUsers.oAUthToDbUser( user?.email || '', user?.name || '' );
-          break;
+  //         case 'oauth': 
+  //           token.user = await dbUsers.oAUthToDbUser( user?.email || '', user?.name || '' );
+  //         break;
 
-          case 'credentials':
-            token.user = user;
-          break;
-        }
+  //         case 'credentials':
+  //           token.user = user;
+  //         break;
+  //       }
 
-      }
+  //     }
 
       return token;
     },
