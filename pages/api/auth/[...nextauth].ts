@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import GithubProvider from 'next-auth/providers/github';
+// import GithubProvider from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 
 import { dbUsers } from '../../../database';
@@ -7,31 +7,46 @@ import { dbUsers } from '../../../database';
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
-    
     // ...add more providers here
 
     Credentials({
-      name: 'Custom Login',
+      name: "Custom Login",
       credentials: {
-        email: { label: 'Correo:', type: 'email', placeholder: 'correo@google.com'  },
-        password: { label: 'Contraseña:', type: 'password', placeholder: 'Contraseña'  },
+        email: {
+          label: "Correo:",
+          type: "email",
+          placeholder: "correo@google.com",
+        },
+        password: {
+          label: "Contraseña:",
+          type: "password",
+          placeholder: "Contraseña",
+        },
       },
       async authorize(credentials): Promise<any> {
         // console.log({credentials})
         // return { name: 'Juan', correo: 'juan@google.com', role: 'admin' };
 
-        return await dbUsers.checkUserEmailPassword( credentials!.email, credentials!.password );
+        // Replace the following line with your own logic to check the user's email and password
+        const user = await dbUsers.checkUserEmailPassword(
+          credentials!.email,
+          credentials!.password
+        );
 
-      }
+        if (user) {
+          // If the user is found, return the user object
+          return user;
+        } else {
+          // If the user is not found, return null
+          return null;
+        }
+      },
     }),
 
-
-    GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
-
-
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID!,
+    //   clientSecret: process.env.GITHUB_SECRET!,
+    // }),
   ],
 
   // Custom Pages
