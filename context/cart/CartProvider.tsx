@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { ICartProduct, IOrder, ShippingAddress } from "../../interfaces";
 import { CartContext, cartReducer } from "./";
-import { tesloApi } from '../../apix';
+import { tesloApi } from '../../api';
 
 export interface CartState {
   isLoaded: boolean;
